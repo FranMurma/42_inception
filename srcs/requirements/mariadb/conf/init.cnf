@@ -1,0 +1,22 @@
+# mysqld: MariaDB es una derivación de MySQL. Es compatible. mysqld.conf se usa para configurar el servidor MariaDB,
+# mysqld es el nombre del proceso de servidor tanto en MySQL como en MariaDB.
+# La "d" en mysqld indica que se trata de un daemon, un programa que se ejecuta en segundo plano para gestionar 
+# la base de datos MySQL o MariaDB
+# La instrucción [mysql] significa que lo siguiente son configuraciones específicas para el cliente de MySQL.
+[mysql]
+# Establecemos el conjunto de caracteres predeterminado a utf8 para el cliente de MySQL
+default-character-set=utf8
+
+# [mysqld] es la sección de configuración del servidor MariaDB
+[mysqld]
+# El servidor se ejecutará como el usuario root
+user                    = root
+# Puerto en el que MariaDB escuchará (3306 es el puerto predeterminado para MySQL/MariaDB)
+port                    = 3306
+# Directorio donde se almacenan los datos de la base de datos
+datadir                 = /var/lib/mysql
+# Ubicación del socket Unix para conexiones locales
+socket                  = /var/run/mysqld/mysqld.sock
+# Configuración para que MariaDB escuche en todas las interfaces de red
+bind-address            = 0.0.0.0  # Escucha en todas las IPs de la máquina
+

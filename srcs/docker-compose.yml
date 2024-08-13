@@ -1,0 +1,84 @@
+# El archivo YAML es donde definimos los servicios, redes y volúmenes de nuestra aplicación Docker
+# Tenemos 3 servicios a instalar: mariadb, wordpress y NGINX. Irá todo unido en una red: Inception.
+# Tendremos 2 volúmenes para guardar los datos de mariadb y wordpress
+services:
+  nginx:
+    image: nginx:1.20.2
+    container_name: nginx
+    volumes:
+      - wordpress_volume:/var/www/html
+    networks:
+      - inception
+    depends_on:
+      - wordpress
+    build:
+      context: requirements/nginx
+      dockerfile: Dockerfile
+    # Aquí exponemos el puerto 443 EXTERNAMENTE. El puerto 443 del contenedor va al 443 del host
+    ports:
+      - "443:443"
+    restart: always
+
+  mariadb:
+    image: mariadb:10.5.9
+    container_name: mariadb
+    # Networks va con '-' porque podemos poner varias redes 
+    networks:
+      - inception
+    # El volumen que guarda los datos de mariadb se llamara mariadb_volume y lo guardamos en:
+    # /var/lib/mysql, dentro del contenedor:
+    # Where to Store Data: The -v /my/own/datadir:/var/lib/mysql:Z part of the command mounts 
+    # the /my/own/datadir directory from the underlying host system as /var/lib/mysql inside 
+    # the container, where MariaDB by default will write its data files.
+    volumes:
+      - mariadb_volume:/var/lib/mysql
+    # Creamos la imagen desde services/mariadb usando el archivo Dockerfile
+    build:
+      context: requirements/mariadb
+      dockerfile: Dockerfile
+    # Usamos el puerto 3306 para conexión INTERNA
+    #    expose:
+    #      - "3306:3306"
+    # Reiniciaremos el contenedor siempre que se detenga
+    restart: always
+    env_file:
+      - .env
+
+  wordpress:
+    image: wordpress:5.7.2-php7.4-apache
+    container_name: wordpress
+    networks:
+      - inception
+    volumes:
+      - wordpress_volume:/var/www/html
+    build:
+      context: requirements/wordpress
+      dockerfile: Dockerfile
+    depends_on:
+      - mariadb
+    restart: always
+    env_file:
+      - .env
+
+# Configuración de los volúmenes
+volumes:
+  wordpress_volume:
+    driver: local
+    driver_opts:
+      type: none
+      # type: none: Indica que no se va a crear un sistema de archivos específico, sino que se está utilizando un directorio existente en el host. o: bind: Especifica que se debe realizar una operación de montaje de tipo "bind", que enlaza un directorio del host en el sistema de archivos del contenedor.
+      o: bind
+      device: "/home/${USER}/data/wordpress"
+
+  mariadb_volume:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: "/home/${USER}/data/mariadb"
+
+networks:
+  inception:
+    name: inception
+    driver: bridge
+
