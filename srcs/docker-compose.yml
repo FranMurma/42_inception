@@ -36,9 +36,6 @@ services:
     build:
       context: requirements/mariadb
       dockerfile: Dockerfile
-    # Usamos el puerto 3306 para conexión INTERNA
-    #    expose:
-    #      - "3306:3306"
     # Reiniciaremos el contenedor siempre que se detenga
     restart: always
     env_file:

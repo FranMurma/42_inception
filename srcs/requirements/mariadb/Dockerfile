@@ -16,7 +16,7 @@ COPY ./conf/init.cnf /etc/mysql/mariadb.conf.d/
 COPY ./tools/mariadb_start.sh /etc
 
 # Damos los permisos necesarios, verificar si es necesario
-RUN chmod +x /etc/mariadb_start.sh
+RUN chmod a+x /etc/mariadb_start.sh
 
 #Crea /var/run/mysqld si no existe, porque lo necesita mysql para guardar los archivos socket y PID
 RUN mkdir -p /var/run/mysqld && \
