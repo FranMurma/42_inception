@@ -3,11 +3,12 @@ FROM debian:11.9
 
 # RUN ejecuta comandos durante el proceso de construcción de la imagen
 # Actualiza el sistema e instala los paquetes necesarios. -y es contestar yes
-RUN apt update -y && \
-	apt upgrade -y && \
-	apt-get install -y mariadb-server && \
-	apt-get clean && \
-	rm -rf /var/lib/apt/lists/*
+#RUN apt update -y && \
+#	apt upgrade -y && \
+#	apt-get install -y mariadb-server && \
+#	apt-get clean && \
+#	rm -rf /var/lib/apt/lists/*
+RUN apt-get -y update && apt-get install -y mariadb-server
 
 # COPY copia archivos desde el sistema de archivos local al sistema de archivos del contenedor
 COPY ./conf/init.cnf /etc/mysql/mariadb.conf.d/

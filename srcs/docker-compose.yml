@@ -65,14 +65,14 @@ volumes:
       type: none
       # type: none: Indica que no se va a crear un sistema de archivos específico, sino que se está utilizando un directorio existente en el host. o: bind: Especifica que se debe realizar una operación de montaje de tipo "bind", que enlaza un directorio del host en el sistema de archivos del contenedor.
       o: bind
-      device: "/home/${USER}/data/wordpress"
+      device: "/home/frmurcia/data/wordpress"
 
   mariadb_volume:
     driver: local
     driver_opts:
       type: none
       o: bind
-      device: "/home/${USER}/data/mariadb"
+      device: "/home/frmurcia/data/mariadb"
 
 networks:
   inception:

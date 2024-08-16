@@ -7,4 +7,3 @@ if [ ! -f /etc/ssl/certs/nginx.crt ]; then
 fi
 echo "Successful creation of SSL certificates!"
 exec "$@"
-

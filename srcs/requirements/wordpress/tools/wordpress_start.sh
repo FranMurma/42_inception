@@ -8,11 +8,11 @@ while ! nc -z $DB_HOST 3306; do
 done
 echo "Database is ready!"
 
-# Cambia la configuración de PHP-FPM para escuchar en el puerto 9000 en lugar de un socket Unix
-# Esto asegura que PHP-FPM esté disponible para Nginx a través del puerto 9000
+# Verifica si el archivo de configuración de PHP-FPM existe y cambia la configuración para usar el socket Unix
 if [ -f /etc/php/7.4/fpm/pool.d/www.conf ]; then
+    # Cambia la configuración para usar el socket Unix en lugar del puerto 9000
     sed -i '/^listen = /s/.*/listen = 0.0.0.0:9000/' /etc/php/7.4/fpm/pool.d/www.conf
-    echo "Successfully edited www.conf: Listening on port 9000."
+    echo "Successfully edited www.conf: Listening Unix socket."
 else
     echo "Error: www.conf file doesn't exist"
 fi

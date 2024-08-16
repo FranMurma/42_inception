@@ -2,7 +2,7 @@
 DOCKER_COMPOSE_YAML = srcs/docker-compose.yml
 MARIADB_DATA_DIR = /home/frmurcia/data/mariadb
 WORDPRESS_DATA_DIR = /home/frmurcia/data/wordpress
-IMAGES = nginx mariadb wordpress
+IMAGES = nginx:1.20.2 mariadb:10.5.9 wordpress:5.7.2-php7.4-apache 
 VOLUMES = srcs_mariadb_data srcs_wordpress_data
 
 # Objetivos
@@ -38,12 +38,15 @@ clean: down
 
 # Limpia absolutamente todo, incluyendo volúmenes y directorios de datos
 fclean: clean
-	@docker rmi -f $(IMAGES)  # Elimina las imágenes específicas del proyecto
-	@docker volume rm -f $(VOLUMES)  # Elimina los volúmenes asociados
+	@docker rmi -f $(IMAGES) || true  # Elimina las imágenes específicas del proyecto, ignora errores
+	@docker volume rm -f $(VOLUMES) || true  # Elimina los volúmenes asociados especificados, ignora errores
+	@docker volume prune -f || true  # Elimina todos los volúmenes no utilizados por contenedores, ignora errores
 	@rm -rf $(MARIADB_DATA_DIR) $(WORDPRESS_DATA_DIR)  # Elimina los datos persistentes de MariaDB y WordPress
+
 
 # re ejecuta los objetivos clean y luego up
 re: clean up
+	docker-compose -f $(DOCKER_COMPOSE_YAML) up --build -d
 
 # Reinicia todo eliminando los directorios de datos y volviendo a crearlos
 restart: fclean create_dirs up

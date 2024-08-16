@@ -22,7 +22,7 @@ RUN mkdir -p /run/php && chmod 755 /run/php
 
 # Copiamos un archivo de configuración personalizado para PHP-FPM
 # Este archivo www.conf contiene configuraciones específicas para optimizar cómo PHP-FPM maneja las solicitudes, ajustando parámetros como los límites de memoria y las conexiones
-COPY ./conf/www.conf /etc/php/7.4/fpm/pool.d/	
+#COPY ./conf/www.conf /etc/php/7.4/fpm/pool.d/	
 # revisar
 
 

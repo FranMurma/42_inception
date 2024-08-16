@@ -1,6 +1,5 @@
-# Script en bash que automatiza la configuración inicial de MariaDB dentro de un contenedor Docker
 #! /bin/bash
-
+# Script en bash que automatiza la configuración inicial de MariaDB dentro de un contenedor Docker
 
 service mariadb start
 
