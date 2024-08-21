@@ -56,8 +56,29 @@ services:
     restart: always
     env_file:
       - .env
+ 
+  adminer:
+    build: ./requirements/adminer
+    image: adminer:custom
+    container_name: adminer
+    networks:
+      - inception
+    env_file:
+      - .env
+    environment:
+      - ADMINER_DEFAULT_SERVER=mariadb
+    restart: always
 
-# Configuración de los volúmenes
+  ftp:
+    build: ./requirements/ftp
+    container_name: ftp
+    networks:
+      - inception
+    volumes:
+      - wordpress_volume:/home/ftpuser/ftp
+    restart: always
+
+        # Configuración de los volúmenes
 volumes:
   wordpress_volume:
     driver: local
@@ -78,4 +99,5 @@ networks:
   inception:
     name: inception
     driver: bridge
+
 

@@ -38,11 +38,12 @@ clean: down
 
 # Limpia absolutamente todo, incluyendo volúmenes y directorios de datos
 fclean: clean
-	@docker rmi -f $(IMAGES) || true  # Elimina las imágenes específicas del proyecto, ignora errores
-	@docker volume rm -f $(VOLUMES) || true  # Elimina los volúmenes asociados especificados, ignora errores
-	@docker volume prune -f || true  # Elimina todos los volúmenes no utilizados por contenedores, ignora errores
+	@docker rmi -f $(IMAGES) 2>/dev/null || true  # Elimina las imágenes específicas del proyecto, ignora errores
+	@docker volume rm -f $(VOLUMES) 2>/dev/null || true  # Elimina los volúmenes asociados especificados, ignora errores
+	@docker volume prune -f 2>/dev/null || true  # Elimina todos los volúmenes no utilizados por contenedores, ignora errores
+	@docker network rm inception 2>/dev/null || true  # Elimina la red si existe, ignora errores y advertencias
 	@rm -rf $(MARIADB_DATA_DIR) $(WORDPRESS_DATA_DIR)  # Elimina los datos persistentes de MariaDB y WordPress
-
+	@docker system prune -af 2>/dev/null || true  # Limpia todo lo posible (contenedores, imágenes, volúmenes, redes), ignora errores
 
 # re ejecuta los objetivos clean y luego up
 re: clean up
